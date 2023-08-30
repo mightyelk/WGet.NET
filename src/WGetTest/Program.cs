@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using WGetNET;
+using System.Threading;
 
 namespace WGetTest
 {
@@ -21,6 +22,7 @@ namespace WGetTest
         {
             try
             {
+                CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
                 WinGetPackageManager connector = new WinGetPackageManager();
                 WinGetSourceManager sourceManager = new WinGetSourceManager();
                 WinGetInfo info = new WinGetInfo();
@@ -57,7 +59,7 @@ namespace WGetTest
                 string hash = connector.Hash("C:\\Test\\HashTest.txt");
                 Console.WriteLine(hash);
 
-                Task<string> settingsTask = connector.ExportSettingsAsync();
+                Task<string> settingsTask = connector.ExportSettingsAsync(cancellationTokenSource.Token);
                 settingsTask.Wait();
                 string settings = settingsTask.Result;
                 bool settingExportStatus = connector.ExportSettingsToFile("C:\\Test\\Settings.json");

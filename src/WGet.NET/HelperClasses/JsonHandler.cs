@@ -3,9 +3,11 @@
 // https://github.com/basicx-StrgV/                 //
 //--------------------------------------------------//
 using System;
+using System.Data;
 using System.IO;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace WGetNET.HelperClasses
@@ -53,13 +55,13 @@ namespace WGetNET.HelperClasses
         /// A <see cref="System.Threading.Tasks.Task"/>, containing the result.
         /// The result is a nullable object of the given class type. It will be <see langword="null"/> if the action failed.
         /// </returns>
-        public static async Task<T?> StringToObjectAsync<T>(string jsonString) where T : class
+        public static async Task<T?> StringToObjectAsync<T>(string jsonString, CancellationToken cancellationToken) where T : class
         {
             try
             {
                 using (MemoryStream dataStream = new MemoryStream(Encoding.UTF8.GetBytes(jsonString)))
                 {
-                    return await JsonSerializer.DeserializeAsync<T>(dataStream);
+                    return await JsonSerializer.DeserializeAsync<T>(utf8Json: dataStream, cancellationToken: cancellationToken);
                 }
             }
             catch (Exception)

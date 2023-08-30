@@ -4,6 +4,7 @@
 //--------------------------------------------------//
 using System;
 using System.ComponentModel;
+using System.Threading;
 using System.Threading.Tasks;
 using WGetNET.HelperClasses;
 
@@ -119,12 +120,12 @@ namespace WGetNET
         /// The current action failed for an unexpected reason.
         /// Please see inner exception.
         /// </exception>
-        public async Task<string> ExportSettingsAsync()
+        public async Task<string> ExportSettingsAsync(CancellationToken cancellationToken)
         {
             try
             {
                 ProcessResult result =
-                    await _processManager.ExecuteWingetProcessAsync(_exportSettingsCmd);
+                    await _processManager.ExecuteWingetProcessAsync(_exportSettingsCmd, cancellationToken);
 
                 return ProcessOutputReader.ExportOutputToString(result);
             }
@@ -195,7 +196,7 @@ namespace WGetNET
         /// The current action failed for an unexpected reason.
         /// Please see inner exception.
         /// </exception>
-        public async Task<bool> ExportSettingsToFileAsync(string file)
+        public async Task<bool> ExportSettingsToFileAsync(string file,CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(file))
             {
@@ -205,7 +206,7 @@ namespace WGetNET
             try
             {
                 ProcessResult result =
-                    await _processManager.ExecuteWingetProcessAsync(_exportSettingsCmd);
+                    await _processManager.ExecuteWingetProcessAsync(_exportSettingsCmd, cancellationToken);
 
                 return await FileHandler.ExportOutputToFileAsync(result, file);
             }

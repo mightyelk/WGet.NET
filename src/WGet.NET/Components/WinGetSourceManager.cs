@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using WGetNET.HelperClasses;
+using System.Threading;
 
 namespace WGetNET
 {
@@ -74,12 +75,12 @@ namespace WGetNET
         /// A <see cref="System.Threading.Tasks.Task"/>, containing the result.
         /// The result is a <see cref="System.Collections.Generic.List{T}"/> of <see cref="WGetNET.WinGetSource"/> instances.
         /// </returns>
-        public async Task<List<WinGetSource>> GetInstalledSourcesAsync()
+        public async Task<List<WinGetSource>> GetInstalledSourcesAsync(CancellationToken cancellationToken)
         {
             try
             {
                 ProcessResult result =
-                    await _processManager.ExecuteWingetProcessAsync(_sourceListCmd);
+                    await _processManager.ExecuteWingetProcessAsync(_sourceListCmd, cancellationToken);
 
                 return ProcessOutputReader.ToSourceList(result.Output);
             }
@@ -276,7 +277,7 @@ namespace WGetNET
         /// <exception cref="System.Security.SecurityException">
         /// The current user is missing administrator privileges for this call.
         /// </exception>
-        public async Task<bool> AddSourceAsync(string name, string arg)
+        public async Task<bool> AddSourceAsync(string name, string arg, CancellationToken cancellationToken)
         {
             if (!PrivilegeChecker.CheckAdministratorPrivileges())
             {
@@ -292,7 +293,7 @@ namespace WGetNET
             {
                 ProcessResult result =
                     await _processManager.ExecuteWingetProcessAsync(
-                        string.Format(_sourceAddCmd, name, arg));
+                        string.Format(_sourceAddCmd, name, arg), cancellationToken);
 
                 return result.Success;
             }
@@ -335,7 +336,7 @@ namespace WGetNET
         /// <exception cref="System.Security.SecurityException">
         /// The current user is missing administrator privileges for this call.
         /// </exception>
-        public async Task<bool> AddSourceAsync(string name, string arg, string type)
+        public async Task<bool> AddSourceAsync(string name, string arg, string type, CancellationToken cancellationToken)
         {
             if (!PrivilegeChecker.CheckAdministratorPrivileges())
             {
@@ -351,7 +352,7 @@ namespace WGetNET
             {
                 ProcessResult result =
                     await _processManager.ExecuteWingetProcessAsync(
-                        string.Format(_sourceAddWithTypeCmd, name, arg, type));
+                        string.Format(_sourceAddWithTypeCmd, name, arg, type), cancellationToken);
 
                 return result.Success;
             }
@@ -388,7 +389,7 @@ namespace WGetNET
         /// <exception cref="System.Security.SecurityException">
         /// The current user is missing administrator privileges for this call.
         /// </exception>
-        public async Task<bool> AddSourceAsync(WinGetSource source)
+        public async Task<bool> AddSourceAsync(WinGetSource source, CancellationToken cancellationToken)
         {
             if (source == null)
             {
@@ -402,10 +403,10 @@ namespace WGetNET
 
             if (string.IsNullOrWhiteSpace(source.SourceType))
             {
-                return await AddSourceAsync(source.SourceName, source.SourceUrl);
+                return await AddSourceAsync(source.SourceName, source.SourceUrl, cancellationToken);
             }
 
-            return await AddSourceAsync(source.SourceName, source.SourceUrl, source.SourceType);
+            return await AddSourceAsync(source.SourceName, source.SourceUrl, source.SourceType, cancellationToken);
         }
         //---------------------------------------------------------------------------------------------
 
@@ -462,12 +463,12 @@ namespace WGetNET
         /// The current action failed for an unexpected reason.
         /// Please see inner exception.
         /// </exception>
-        public async Task<bool> UpdateSourcesAsync()
+        public async Task<bool> UpdateSourcesAsync(CancellationToken cancellationToken)
         {
             try
             {
                 ProcessResult result =
-                    await _processManager.ExecuteWingetProcessAsync(_sourceUpdateCmd);
+                    await _processManager.ExecuteWingetProcessAsync(_sourceUpdateCmd, cancellationToken);
 
                 return result.Success;
             }
@@ -604,12 +605,12 @@ namespace WGetNET
         /// The current action failed for an unexpected reason.
         /// Please see inner exception.
         /// </exception>
-        public async Task<string> ExportSourcesAsync()
+        public async Task<string> ExportSourcesAsync(CancellationToken cancellationToken)
         {
             try
             {
                 ProcessResult result =
-                    await _processManager.ExecuteWingetProcessAsync(_sourceExportCmd);
+                    await _processManager.ExecuteWingetProcessAsync(_sourceExportCmd, cancellationToken);
 
                 return ProcessOutputReader.ExportOutputToString(result);
             }
@@ -638,7 +639,7 @@ namespace WGetNET
         /// The current action failed for an unexpected reason.
         /// Please see inner exception.
         /// </exception>
-        public async Task<string> ExportSourcesAsync(string sourceName)
+        public async Task<string> ExportSourcesAsync(string sourceName, CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(sourceName))
             {
@@ -654,7 +655,7 @@ namespace WGetNET
                     sourceName;
 
                 ProcessResult result =
-                    await _processManager.ExecuteWingetProcessAsync(cmd);
+                    await _processManager.ExecuteWingetProcessAsync(cmd, cancellationToken);
 
                 return ProcessOutputReader.ExportOutputToString(result);
             }
@@ -685,7 +686,7 @@ namespace WGetNET
         /// The current action failed for an unexpected reason.
         /// Please see inner exception.
         /// </exception>
-        public async Task<string> ExportSourcesAsync(WinGetSource source)
+        public async Task<string> ExportSourcesAsync(WinGetSource source, CancellationToken cancellationToken)
         {
             if (source == null)
             {
@@ -697,7 +698,7 @@ namespace WGetNET
                 return string.Empty;
             }
 
-            return await ExportSourcesAsync(source.SourceName);
+            return await ExportSourcesAsync(source.SourceName, cancellationToken);
         }
 
         /// <summary>
@@ -750,9 +751,9 @@ namespace WGetNET
         /// The current action failed for an unexpected reason.
         /// Please see inner exception.
         /// </exception>
-        public async Task<List<WinGetSource>> ExportSourcesToObjectAsync()
+        public async Task<List<WinGetSource>> ExportSourcesToObjectAsync(CancellationToken cancellationToken)
         {
-            return await ExportStringToSourcesAsync(await ExportSourcesAsync());
+            return await ExportStringToSourcesAsync(await ExportSourcesAsync(cancellationToken), cancellationToken);
         }
 
         /// <summary>
@@ -769,9 +770,9 @@ namespace WGetNET
         /// The current action failed for an unexpected reason.
         /// Please see inner exception.
         /// </exception>
-        public async Task<List<WinGetSource>> ExportSourcesToObjectAsync(string sourceName)
+        public async Task<List<WinGetSource>> ExportSourcesToObjectAsync(string sourceName, CancellationToken cancellationToken)
         {
-            return await ExportStringToSourcesAsync(await ExportSourcesAsync(sourceName));
+            return await ExportStringToSourcesAsync(await ExportSourcesAsync(sourceName, cancellationToken), cancellationToken);
         }
 
         /// <summary>
@@ -906,7 +907,7 @@ namespace WGetNET
         /// The current action failed for an unexpected reason.
         /// Please see inner exception.
         /// </exception>
-        public async Task<bool> ExportSourcesToFileAsync(string file)
+        public async Task<bool> ExportSourcesToFileAsync(string file, CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(file))
             {
@@ -916,7 +917,7 @@ namespace WGetNET
             try
             {
                 ProcessResult result =
-                    await _processManager.ExecuteWingetProcessAsync(_sourceExportCmd);
+                    await _processManager.ExecuteWingetProcessAsync(_sourceExportCmd, cancellationToken);
 
                 return await FileHandler.ExportOutputToFileAsync(result, file);
             }
@@ -946,7 +947,7 @@ namespace WGetNET
         /// The current action failed for an unexpected reason.
         /// Please see inner exception.
         /// </exception>
-        public async Task<bool> ExportSourcesToFileAsync(string file, string sourceName)
+        public async Task<bool> ExportSourcesToFileAsync(string file, string sourceName, CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(file) || string.IsNullOrWhiteSpace(sourceName))
             {
@@ -962,7 +963,7 @@ namespace WGetNET
                     sourceName;
 
                 ProcessResult result =
-                    await _processManager.ExecuteWingetProcessAsync(cmd);
+                    await _processManager.ExecuteWingetProcessAsync(cmd, cancellationToken);
 
                 return await FileHandler.ExportOutputToFileAsync(result, file);
             }
@@ -996,7 +997,7 @@ namespace WGetNET
         /// The current action failed for an unexpected reason.
         /// Please see inner exception.
         /// </exception>
-        public async Task<bool> ExportSourcesToFileAsync(string file, WinGetSource source)
+        public async Task<bool> ExportSourcesToFileAsync(string file, WinGetSource source, CancellationToken cancellationToken)
         {
             if (source == null)
             {
@@ -1008,7 +1009,7 @@ namespace WGetNET
                 return false;
             }
 
-            return await ExportSourcesToFileAsync(file, source.SourceName);
+            return await ExportSourcesToFileAsync(file, source.SourceName, cancellationToken);
         }
 
         /// <summary>
@@ -1068,7 +1069,7 @@ namespace WGetNET
         /// A <see cref="System.Threading.Tasks.Task"/>, containing the result.
         /// The result is a <see cref="System.Collections.Generic.List{T}"/> of <see cref="WGetNET.WinGetSource"/> objects.
         /// </returns>
-        private async Task<List<WinGetSource>> ExportStringToSourcesAsync(string exportString)
+        private async Task<List<WinGetSource>> ExportStringToSourcesAsync(string exportString, CancellationToken cancellationToken)
         {
             List<WinGetSource> sourceList = new List<WinGetSource>();
 
@@ -1089,7 +1090,7 @@ namespace WGetNET
                 }
 
                 WinGetSource? source =
-                    await JsonHandler.StringToObjectAsync<WinGetSource>(jsonString.ToString());
+                    await JsonHandler.StringToObjectAsync<WinGetSource>(jsonString.ToString(), cancellationToken);
 
                 if (source == null)
                 {
@@ -1179,7 +1180,7 @@ namespace WGetNET
         /// A <see cref="System.Threading.Tasks.Task"/>, containing the result.
         /// The result is <see langword="true"/> if the action was successfull and <see langword="false"/> if on or more sorces failed.
         /// </returns>
-        public async Task<bool> ImportSourceAsync(List<WinGetSource> winGetSources)
+        public async Task<bool> ImportSourceAsync(List<WinGetSource> winGetSources, CancellationToken cancellationToken)
         {
             if (winGetSources == null || winGetSources.Count <= 0)
             {
@@ -1189,7 +1190,7 @@ namespace WGetNET
             bool status = true;
             for (int i = 0; i < winGetSources.Count; i++)
             {
-                if (!await AddSourceAsync(winGetSources[i]))
+                if (!await AddSourceAsync(winGetSources[i], cancellationToken))
                 {
                     status = false;
                 }
@@ -1208,9 +1209,9 @@ namespace WGetNET
         /// A <see cref="System.Threading.Tasks.Task"/>, containing the result.
         /// The result is <see langword="true"/> if the action was successfull and <see langword="false"/> if it failed.
         /// </returns>
-        public async Task<bool> ImportSourceAsync(WinGetSource winGetSource)
+        public async Task<bool> ImportSourceAsync(WinGetSource winGetSource, CancellationToken cancellationToken)
         {
-            return await AddSourceAsync(winGetSource);
+            return await AddSourceAsync(winGetSource, cancellationToken);
         }
 
         /// <summary>
@@ -1223,16 +1224,16 @@ namespace WGetNET
         /// A <see cref="System.Threading.Tasks.Task"/>, containing the result.
         /// The result is <see langword="true"/> if the action was successfull and <see langword="false"/> if it failed.
         /// </returns>
-        public async Task<bool> ImportSourceAsync(string jsonString)
+        public async Task<bool> ImportSourceAsync(string jsonString, CancellationToken cancellationToken)
         {
-            WinGetSource? source = await JsonHandler.StringToObjectAsync<WinGetSource>(jsonString);
+            WinGetSource? source = await JsonHandler.StringToObjectAsync<WinGetSource>(jsonString, cancellationToken);
 
             if (source == null)
             {
                 throw new WinGetActionFailedException("Importing source failed. Could not parse json.");
             }
 
-            return await AddSourceAsync(source);
+            return await AddSourceAsync(source, cancellationToken);
         }
         //---------------------------------------------------------------------------------------------
 
@@ -1300,7 +1301,7 @@ namespace WGetNET
         /// <exception cref="System.Security.SecurityException">
         /// The current user is missing administrator privileges for this call.
         /// </exception>
-        public async Task<bool> ResetSourcesAsync()
+        public async Task<bool> ResetSourcesAsync(CancellationToken cancellationToken)
         {
             if (!PrivilegeChecker.CheckAdministratorPrivileges())
             {
@@ -1310,7 +1311,7 @@ namespace WGetNET
             try
             {
                 ProcessResult result =
-                    await _processManager.ExecuteWingetProcessAsync(_sourceResetCmd);
+                    await _processManager.ExecuteWingetProcessAsync(_sourceResetCmd, cancellationToken);
 
                 return result.Success;
             }
@@ -1428,7 +1429,7 @@ namespace WGetNET
         /// <exception cref="System.Security.SecurityException">
         /// The current user is missing administrator privileges for this call.
         /// </exception>
-        public async Task<bool> RemoveSourcesAsync(string name)
+        public async Task<bool> RemoveSourcesAsync(string name, CancellationToken cancellationToken)
         {
             if (!PrivilegeChecker.CheckAdministratorPrivileges())
             {
@@ -1443,7 +1444,7 @@ namespace WGetNET
             try
             {
                 ProcessResult result =
-                    await _processManager.ExecuteWingetProcessAsync(string.Format(_sourceRemoveCmd, name));
+                    await _processManager.ExecuteWingetProcessAsync(string.Format(_sourceRemoveCmd, name), cancellationToken);
 
                 return result.Success;
             }
@@ -1477,7 +1478,7 @@ namespace WGetNET
         /// <exception cref="System.Security.SecurityException">
         /// The current user is missing administrator privileges for this call.
         /// </exception>
-        public async Task<bool> RemoveSourcesAsync(WinGetSource source)
+        public async Task<bool> RemoveSourcesAsync(WinGetSource source, CancellationToken cancellationToken)
         {
             if (source == null)
             {
@@ -1489,7 +1490,7 @@ namespace WGetNET
                 return false;
             }
 
-            return await RemoveSourcesAsync(source.SourceName);
+            return await RemoveSourcesAsync(source.SourceName, cancellationToken);
         }
         //---------------------------------------------------------------------------------------------
     }

@@ -7,6 +7,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using WGetNET.HelperClasses;
+using System.Threading;
 
 namespace WGetNET
 {
@@ -60,9 +61,9 @@ namespace WGetNET
         /// A <see cref="WGetNET.ProcessResult"/> object, 
         /// containing the output an exit id of the process.
         /// </returns>
-        public async Task<ProcessResult> ExecuteWingetProcessAsync(string cmd)
+        public async Task<ProcessResult> ExecuteWingetProcessAsync(string cmd, CancellationToken cancellationToken)
         {
-            return await RunProcessAsync(GetStartInfo(cmd));
+            return await RunProcessAsync(GetStartInfo(cmd), cancellationToken);
         }
 
         /// <summary>
@@ -84,7 +85,7 @@ namespace WGetNET
                 StandardOutputEncoding = _winGetStartInfoTemplate.StandardOutputEncoding,
                 UseShellExecute = _winGetStartInfoTemplate.UseShellExecute,
                 WindowStyle = _winGetStartInfoTemplate.WindowStyle,
-                Arguments = cmd
+                Arguments = cmd,
             };
         }
 
@@ -121,7 +122,7 @@ namespace WGetNET
         /// A <see cref="WGetNET.ProcessResult"/> object, 
         /// containing the output an exit id of the process.
         /// </returns>
-        private async Task<ProcessResult> RunProcessAsync(ProcessStartInfo processStartInfo)
+        private async Task<ProcessResult> RunProcessAsync(ProcessStartInfo processStartInfo, CancellationToken cancellationToken)
         {
             ProcessResult result = new ProcessResult();
 
@@ -129,8 +130,8 @@ namespace WGetNET
             using (Process proc = new Process { StartInfo = processStartInfo })
             {
                 proc.Start();
-
-                result.Output = await ReadSreamOutputAsync(proc.StandardOutput);
+                
+                result.Output = await ReadSreamOutputAsync(proc.StandardOutput, cancellationToken);
 
                 //Wait till end and get exit code
                 proc.WaitForExit();
@@ -179,14 +180,14 @@ namespace WGetNET
         /// A <see cref="System.String"/> array 
         /// containing the process output stream content by lines.
         /// </returns>
-        private async Task<string[]> ReadSreamOutputAsync(StreamReader output)
+        private async Task<string[]> ReadSreamOutputAsync(StreamReader output, CancellationToken cancellationToken)
         {
             string[] outputArray = new string[0];
 
             //Read output to list
             while (!output.EndOfStream)
             {
-                string? outputLine = await output.ReadLineAsync();
+                string? outputLine = await output.ReadLineAsync().WaitAsync(cancellationToken).ConfigureAwait(false);
                 if (outputLine is null)
                 {
                     continue;

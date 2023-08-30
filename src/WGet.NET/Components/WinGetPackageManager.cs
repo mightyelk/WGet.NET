@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using WGetNET.HelperClasses;
+using System.Threading;
 
 namespace WGetNET
 {
@@ -132,13 +133,13 @@ namespace WGetNET
         /// The current action failed for an unexpected reason.
         /// Please see inner exception.
         /// </exception>
-        public async Task<List<WinGetPackage>> SearchPackageAsync(string packageName)
+        public async Task<List<WinGetPackage>> SearchPackageAsync(string packageName, CancellationToken cancellationToken)
         {
             try
             {
                 ProcessResult result =
                     await _processManager.ExecuteWingetProcessAsync(
-                        string.Format(_searchCmd, packageName));
+                        string.Format(_searchCmd, packageName), cancellationToken);
 
                 return ProcessOutputReader.ToPackageList(result.Output, PackageAction.Search);
             }
@@ -172,13 +173,13 @@ namespace WGetNET
         /// The current action failed for an unexpected reason.
         /// Please see inner exception.
         /// </exception>
-        public async Task<List<WinGetPackage>> SearchPackageAsync(string packageName, string sourceName)
+        public async Task<List<WinGetPackage>> SearchPackageAsync(string packageName, string sourceName, CancellationToken cancellationToken)
         {
             try
             {
                 ProcessResult result =
                     await _processManager.ExecuteWingetProcessAsync(
-                        string.Format(_searchBySourceCmd, packageName, sourceName));
+                        string.Format(_searchBySourceCmd, packageName, sourceName), cancellationToken);
 
                 return ProcessOutputReader.ToPackageList(result.Output, PackageAction.SearchBySource, sourceName);
             }
@@ -313,12 +314,12 @@ namespace WGetNET
         /// The current action failed for an unexpected reason.
         /// Please see inner exception.
         /// </exception>
-        public async Task<List<WinGetPackage>> GetInstalledPackagesAsync()
+        public async Task<List<WinGetPackage>> GetInstalledPackagesAsync(CancellationToken cancellationToken)
         {
             try
             {
                 ProcessResult result =
-                    await _processManager.ExecuteWingetProcessAsync(_listCmd);
+                    await _processManager.ExecuteWingetProcessAsync(_listCmd, cancellationToken);
 
                 return ProcessOutputReader.ToPackageList(result.Output, PackageAction.InstalledList);
             }
@@ -349,12 +350,12 @@ namespace WGetNET
         /// The current action failed for an unexpected reason.
         /// Please see inner exception.
         /// </exception>
-        public async Task<List<WinGetPackage>> GetInstalledPackagesAsync(string packageName)
+        public async Task<List<WinGetPackage>> GetInstalledPackagesAsync(string packageName, CancellationToken cancellationToken)
         {
             try
             {
                 ProcessResult result =
-                    await _processManager.ExecuteWingetProcessAsync(string.Format(_searchInstalledCmd, packageName));
+                    await _processManager.ExecuteWingetProcessAsync(string.Format(_searchInstalledCmd, packageName), cancellationToken);
 
                 return ProcessOutputReader.ToPackageList(result.Output, PackageAction.InstalledList);
             }
@@ -388,12 +389,12 @@ namespace WGetNET
         /// The current action failed for an unexpected reason.
         /// Please see inner exception.
         /// </exception>
-        public async Task<List<WinGetPackage>> GetInstalledPackagesAsync(string packageName, string sourceName)
+        public async Task<List<WinGetPackage>> GetInstalledPackagesAsync(string packageName, string sourceName, CancellationToken cancellationToken)
         {
             try
             {
                 ProcessResult result =
-                    await _processManager.ExecuteWingetProcessAsync(string.Format(_searchInstalledBySourceCmd, packageName, sourceName));
+                    await _processManager.ExecuteWingetProcessAsync(string.Format(_searchInstalledBySourceCmd, packageName, sourceName), cancellationToken);
 
                 return ProcessOutputReader.ToPackageList(result.Output, PackageAction.InstalledListBySource, sourceName);
             }
@@ -490,7 +491,7 @@ namespace WGetNET
         /// The current action failed for an unexpected reason.
         /// Please see inner exception.
         /// </exception>
-        public async Task<bool> InstallPackageAsync(string packageId)
+        public async Task<bool> InstallPackageAsync(string packageId, CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(packageId))
             {
@@ -501,7 +502,7 @@ namespace WGetNET
             {
                 ProcessResult result =
                     await _processManager.ExecuteWingetProcessAsync(
-                        string.Format(_installCmd, packageId));
+                        string.Format(_installCmd, packageId), cancellationToken);
 
                 return result.Success;
             }
@@ -530,7 +531,7 @@ namespace WGetNET
         /// The current action failed for an unexpected reason.
         /// Please see inner exception.
         /// </exception>
-        public async Task<bool> InstallPackageAsync(WinGetPackage package)
+        public async Task<bool> InstallPackageAsync(WinGetPackage package, CancellationToken cancellationToken)
         {
             if (package == null)
             {
@@ -542,7 +543,7 @@ namespace WGetNET
                 return false;
             }
 
-            return await InstallPackageAsync(package.PackageId);
+            return await InstallPackageAsync(package.PackageId, cancellationToken);
         }
         //---------------------------------------------------------------------------------------------
 
@@ -630,7 +631,7 @@ namespace WGetNET
         /// The current action failed for an unexpected reason.
         /// Please see inner exception.
         /// </exception>
-        public async Task<bool> UninstallPackageAsync(string packageId)
+        public async Task<bool> UninstallPackageAsync(string packageId, CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(packageId))
             {
@@ -641,7 +642,7 @@ namespace WGetNET
             {
                 ProcessResult result =
                     await _processManager.ExecuteWingetProcessAsync(
-                        string.Format(_uninstallCmd, packageId));
+                        string.Format(_uninstallCmd, packageId), cancellationToken);
 
                 return result.Success;
             }
@@ -670,7 +671,7 @@ namespace WGetNET
         /// The current action failed for an unexpected reason.
         /// Please see inner exception.
         /// </exception>
-        public async Task<bool> UninstallPackageAsync(WinGetPackage package)
+        public async Task<bool> UninstallPackageAsync(WinGetPackage package, CancellationToken cancellationToken)
         {
             if (package == null)
             {
@@ -682,7 +683,7 @@ namespace WGetNET
                 return false;
             }
 
-            return await UninstallPackageAsync(package.PackageId);
+            return await UninstallPackageAsync(package.PackageId, cancellationToken);
         }
         //---------------------------------------------------------------------------------------------
 
@@ -735,14 +736,14 @@ namespace WGetNET
         /// The current action failed for an unexpected reason.
         /// Please see inner exception.
         /// </exception>
-        public async Task<List<WinGetPackage>> GetUpgradeablePackagesAsync()
+        public async Task<List<WinGetPackage>> GetUpgradeablePackagesAsync(CancellationToken cancellationToken)
         {
             try
             {
                 string argument = AddArgumentByVersion(_getUpgradeableCmd);
 
                 ProcessResult result =
-                    await _processManager.ExecuteWingetProcessAsync(argument);
+                    await _processManager.ExecuteWingetProcessAsync(argument, cancellationToken);
 
                 return ProcessOutputReader.ToPackageList(result.Output, PackageAction.UpgradeList);
             }
@@ -839,7 +840,7 @@ namespace WGetNET
         /// The current action failed for an unexpected reason.
         /// Please see inner exception.
         /// </exception>
-        public async Task<bool> UpgradePackageAsync(string packageId)
+        public async Task<bool> UpgradePackageAsync(string packageId, CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(packageId))
             {
@@ -850,7 +851,7 @@ namespace WGetNET
             {
                 ProcessResult result =
                     await _processManager.ExecuteWingetProcessAsync(
-                        string.Format(_upgradeCmd, packageId));
+                        string.Format(_upgradeCmd, packageId), cancellationToken);
 
                 return result.Success;
             }
@@ -879,7 +880,7 @@ namespace WGetNET
         /// The current action failed for an unexpected reason.
         /// Please see inner exception.
         /// </exception>
-        public async Task<bool> UpgradePackageAsync(WinGetPackage package)
+        public async Task<bool> UpgradePackageAsync(WinGetPackage package,CancellationToken cancellationToken)
         {
             if (package == null)
             {
@@ -891,7 +892,7 @@ namespace WGetNET
                 return false;
             }
 
-            return await UpgradePackageAsync(package.PackageId);
+            return await UpgradePackageAsync(package.PackageId, cancellationToken);
         }
 
         /// <summary>
@@ -945,12 +946,12 @@ namespace WGetNET
         /// The current action failed for an unexpected reason.
         /// Please see inner exception.
         /// </exception>
-        public async Task<bool> UpgradeAllPackagesAsync()
+        public async Task<bool> UpgradeAllPackagesAsync(CancellationToken cancellationToken)
         {
             try
             {
                 ProcessResult result =
-                    await _processManager.ExecuteWingetProcessAsync(_upgradeAllCmd);
+                    await _processManager.ExecuteWingetProcessAsync(_upgradeAllCmd, cancellationToken);
 
                 return result.Success;
             }
@@ -1032,7 +1033,7 @@ namespace WGetNET
         /// The current action failed for an unexpected reason.
         /// Please see inner exception.
         /// </exception>
-        public async Task<bool> ExportPackagesToFileAsync(string file)
+        public async Task<bool> ExportPackagesToFileAsync(string file, CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(file))
             {
@@ -1043,7 +1044,7 @@ namespace WGetNET
             {
                 ProcessResult result =
                     await _processManager.ExecuteWingetProcessAsync(
-                        string.Format(_exportCmd, file));
+                        string.Format(_exportCmd, file), cancellationToken);
 
                 return result.Success;
             }
@@ -1119,7 +1120,7 @@ namespace WGetNET
         /// The current action failed for an unexpected reason.
         /// Please see inner exception.
         /// </exception>
-        public async Task<bool> ImportPackagesFromFileAsync(string file)
+        public async Task<bool> ImportPackagesFromFileAsync(string file, CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(file))
             {
@@ -1130,7 +1131,7 @@ namespace WGetNET
             {
                 ProcessResult result =
                     await _processManager.ExecuteWingetProcessAsync(
-                        string.Format(_importCmd, file));
+                        string.Format(_importCmd, file), cancellationToken);
 
                 return result.Success;
             }
@@ -1234,7 +1235,7 @@ namespace WGetNET
         /// A <see cref="System.Threading.Tasks.Task"/>, containing the result.
         /// The result is a <see cref="System.String"/> containing the hash.
         /// </returns>
-        public async Task<string> HashAsync(string file)
+        public async Task<string> HashAsync(string file, CancellationToken cancellationToken)
         {
             if (!File.Exists(file))
             {
@@ -1245,7 +1246,7 @@ namespace WGetNET
             {
                 ProcessResult result =
                     await _processManager.ExecuteWingetProcessAsync(
-                        string.Format(_hashCmd, file));
+                        string.Format(_hashCmd, file), cancellationToken);
 
                 if (!result.Success)
                 {
@@ -1274,7 +1275,7 @@ namespace WGetNET
         /// A <see cref="System.Threading.Tasks.Task"/>, containing the result.
         /// The result is a <see cref="System.String"/> containing the hash.
         /// </returns>
-        public async Task<string> HashAsync(FileInfo file)
+        public async Task<string> HashAsync(FileInfo file, CancellationToken cancellationToken)
         {
             if (!file.Exists)
             {
@@ -1285,7 +1286,7 @@ namespace WGetNET
             {
                 ProcessResult result =
                     await _processManager.ExecuteWingetProcessAsync(
-                        string.Format(_hashCmd, file.FullName));
+                        string.Format(_hashCmd, file.FullName), cancellationToken);
 
                 if (!result.Success)
                 {

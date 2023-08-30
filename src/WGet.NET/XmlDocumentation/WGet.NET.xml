@@ -30,7 +30,7 @@
             containing the output an exit id of the process.
             </returns>
         </member>
-        <member name="M:WGetNET.ProcessManager.ExecuteWingetProcessAsync(System.String)">
+        <member name="M:WGetNET.ProcessManager.ExecuteWingetProcessAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Asynchronous executes a winget process with the given command and returns the result.
             </summary>
@@ -62,7 +62,7 @@
             containing the output an exit id of the process.
             </returns>
         </member>
-        <member name="M:WGetNET.ProcessManager.RunProcessAsync(System.Diagnostics.ProcessStartInfo)">
+        <member name="M:WGetNET.ProcessManager.RunProcessAsync(System.Diagnostics.ProcessStartInfo,System.Threading.CancellationToken)">
             <summary>
             Asynchronous runs a process with the current start informations.
             </summary>
@@ -83,7 +83,7 @@
             containing the process output stream content by lines.
             </returns>
         </member>
-        <member name="M:WGetNET.ProcessManager.ReadSreamOutputAsync(System.IO.StreamReader)">
+        <member name="M:WGetNET.ProcessManager.ReadSreamOutputAsync(System.IO.StreamReader,System.Threading.CancellationToken)">
             <summary>
             Asynchronous reads the data from the process output to a string array.
             </summary>
@@ -144,7 +144,7 @@
             Please see inner exception.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetInfo.ExportSettingsAsync">
+        <member name="M:WGetNET.WinGetInfo.ExportSettingsAsync(System.Threading.CancellationToken)">
             <summary>
             Asynchronous exports the WinGet settings to a json string.
             </summary>
@@ -178,7 +178,7 @@
             Please see inner exception.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetInfo.ExportSettingsToFileAsync(System.String)">
+        <member name="M:WGetNET.WinGetInfo.ExportSettingsToFileAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Asynchronous exports the WinGet settings to a json and writes them to the given file.
             </summary>
@@ -246,7 +246,7 @@
             Please see inner exception.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetPackageManager.SearchPackageAsync(System.String)">
+        <member name="M:WGetNET.WinGetPackageManager.SearchPackageAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Uses the winget search function to asynchronously search for a package that maches the given name.
             </summary>
@@ -265,7 +265,7 @@
             Please see inner exception.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetPackageManager.SearchPackageAsync(System.String,System.String)">
+        <member name="M:WGetNET.WinGetPackageManager.SearchPackageAsync(System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Uses the winget search function to asynchronously search for a package that maches the given name.
             </summary>
@@ -341,7 +341,7 @@
             Please see inner exception.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetPackageManager.GetInstalledPackagesAsync">
+        <member name="M:WGetNET.WinGetPackageManager.GetInstalledPackagesAsync(System.Threading.CancellationToken)">
             <summary>
             Asynchronously gets a list of all installed packages.
             </summary>
@@ -357,7 +357,7 @@
             Please see inner exception.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetPackageManager.GetInstalledPackagesAsync(System.String)">
+        <member name="M:WGetNET.WinGetPackageManager.GetInstalledPackagesAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Asynchronously gets a list of all installed packages. That match the provided name.
             </summary>
@@ -376,7 +376,7 @@
             Please see inner exception.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetPackageManager.GetInstalledPackagesAsync(System.String,System.String)">
+        <member name="M:WGetNET.WinGetPackageManager.GetInstalledPackagesAsync(System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Asynchronously gets a list of all installed packages. That match the provided name.
             </summary>
@@ -430,7 +430,7 @@
             Please see inner exception.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetPackageManager.InstallPackageAsync(System.String)">
+        <member name="M:WGetNET.WinGetPackageManager.InstallPackageAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Asynchronously install a package using winget.
             </summary>
@@ -447,7 +447,7 @@
             Please see inner exception.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetPackageManager.InstallPackageAsync(WGetNET.WinGetPackage)">
+        <member name="M:WGetNET.WinGetPackageManager.InstallPackageAsync(WGetNET.WinGetPackage,System.Threading.CancellationToken)">
             <summary>
             Asynchronously install a package using winget.
             </summary>
@@ -496,7 +496,7 @@
             Please see inner exception.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetPackageManager.UninstallPackageAsync(System.String)">
+        <member name="M:WGetNET.WinGetPackageManager.UninstallPackageAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Asynchronously uninsatll a package using winget.
             </summary>
@@ -513,7 +513,7 @@
             Please see inner exception.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetPackageManager.UninstallPackageAsync(WGetNET.WinGetPackage)">
+        <member name="M:WGetNET.WinGetPackageManager.UninstallPackageAsync(WGetNET.WinGetPackage,System.Threading.CancellationToken)">
             <summary>
             Asynchronously uninstall a package using winget.
             </summary>
@@ -545,7 +545,7 @@
             Please see inner exception.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetPackageManager.GetUpgradeablePackagesAsync">
+        <member name="M:WGetNET.WinGetPackageManager.GetUpgradeablePackagesAsync(System.Threading.CancellationToken)">
             <summary>
             Asynchronously get all upgradeable packages.
             </summary>
@@ -593,7 +593,7 @@
             Please see inner exception.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetPackageManager.UpgradePackageAsync(System.String)">
+        <member name="M:WGetNET.WinGetPackageManager.UpgradePackageAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Asynchronously upgrades a package using winget.
             </summary>
@@ -610,7 +610,7 @@
             Please see inner exception.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetPackageManager.UpgradePackageAsync(WGetNET.WinGetPackage)">
+        <member name="M:WGetNET.WinGetPackageManager.UpgradePackageAsync(WGetNET.WinGetPackage,System.Threading.CancellationToken)">
             <summary>
             Asynchronously upgrades a package using winget.
             </summary>
@@ -645,7 +645,7 @@
             Please see inner exception.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetPackageManager.UpgradeAllPackagesAsync">
+        <member name="M:WGetNET.WinGetPackageManager.UpgradeAllPackagesAsync(System.Threading.CancellationToken)">
             <summary>
             Asynchronously tries to upgrade all packages using winget.
             </summary>
@@ -679,7 +679,7 @@
             Please see inner exception.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetPackageManager.ExportPackagesToFileAsync(System.String)">
+        <member name="M:WGetNET.WinGetPackageManager.ExportPackagesToFileAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Asynchronously exports a list of all installed winget packages as json to the given file.
             </summary>
@@ -716,7 +716,7 @@
             Please see inner exception.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetPackageManager.ImportPackagesFromFileAsync(System.String)">
+        <member name="M:WGetNET.WinGetPackageManager.ImportPackagesFromFileAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Asynchronously imports packages and trys to installes/upgrade all pakages in the list, if possible.
             </summary>
@@ -759,7 +759,7 @@
             A <see cref="T:System.String"/> containing the hash.
             </returns>
         </member>
-        <member name="M:WGetNET.WinGetPackageManager.HashAsync(System.String)">
+        <member name="M:WGetNET.WinGetPackageManager.HashAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Asynchronously executes the WinGet hash function, to calculate the hash for the given file.
             </summary>
@@ -771,7 +771,7 @@
             The result is a <see cref="T:System.String"/> containing the hash.
             </returns>
         </member>
-        <member name="M:WGetNET.WinGetPackageManager.HashAsync(System.IO.FileInfo)">
+        <member name="M:WGetNET.WinGetPackageManager.HashAsync(System.IO.FileInfo,System.Threading.CancellationToken)">
             <summary>
             Asynchronously executes the WinGet hash function, to calculate the hash for the given file.
             </summary>
@@ -816,7 +816,7 @@
             A <see cref="T:System.Collections.Generic.List`1"/> of <see cref="T:WGetNET.WinGetSource"/> instances.
             </returns>
         </member>
-        <member name="M:WGetNET.WinGetSourceManager.GetInstalledSourcesAsync">
+        <member name="M:WGetNET.WinGetSourceManager.GetInstalledSourcesAsync(System.Threading.CancellationToken)">
             <summary>
             Asynchronously gets a list of all sources that are installed in winget.
             </summary>
@@ -910,7 +910,7 @@
             The current user is missing administrator privileges for this call.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetSourceManager.AddSourceAsync(System.String,System.String)">
+        <member name="M:WGetNET.WinGetSourceManager.AddSourceAsync(System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Asynchronously adds a new source to winget (Needs administrator rights).
             </summary>
@@ -938,7 +938,7 @@
             The current user is missing administrator privileges for this call.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetSourceManager.AddSourceAsync(System.String,System.String,System.String)">
+        <member name="M:WGetNET.WinGetSourceManager.AddSourceAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Asynchronously adds a new source to winget (Needs administrator rights).
             </summary>
@@ -969,7 +969,7 @@
             The current user is missing administrator privileges for this call.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetSourceManager.AddSourceAsync(WGetNET.WinGetSource)">
+        <member name="M:WGetNET.WinGetSourceManager.AddSourceAsync(WGetNET.WinGetSource,System.Threading.CancellationToken)">
             <summary>
             Asynchronously adds a new source to winget (Needs administrator rights).
             </summary>
@@ -1012,7 +1012,7 @@
             Please see inner exception.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetSourceManager.UpdateSourcesAsync">
+        <member name="M:WGetNET.WinGetSourceManager.UpdateSourcesAsync(System.Threading.CancellationToken)">
             <summary>
             Asynchronously updates all sources that are installed in winget.
             </summary>
@@ -1080,7 +1080,7 @@
             Please see inner exception.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetSourceManager.ExportSourcesAsync">
+        <member name="M:WGetNET.WinGetSourceManager.ExportSourcesAsync(System.Threading.CancellationToken)">
             <summary>
             Asynchronously exports the winget sources as a json string.
             </summary>
@@ -1096,7 +1096,7 @@
             Please see inner exception.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetSourceManager.ExportSourcesAsync(System.String)">
+        <member name="M:WGetNET.WinGetSourceManager.ExportSourcesAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Asynchronously exports the winget sources as a json string.
             </summary>
@@ -1113,7 +1113,7 @@
             Please see inner exception.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetSourceManager.ExportSourcesAsync(WGetNET.WinGetSource)">
+        <member name="M:WGetNET.WinGetSourceManager.ExportSourcesAsync(WGetNET.WinGetSource,System.Threading.CancellationToken)">
             <summary>
             Asynchronously exports the winget sources as a json string.
             </summary>
@@ -1162,7 +1162,7 @@
             Please see inner exception.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetSourceManager.ExportSourcesToObjectAsync">
+        <member name="M:WGetNET.WinGetSourceManager.ExportSourcesToObjectAsync(System.Threading.CancellationToken)">
             <summary>
             Asynchronously exports the winget sources to a <see cref="T:System.Collections.Generic.List`1"/> of <see cref="T:WGetNET.WinGetSource"/> objects.
             </summary>
@@ -1178,7 +1178,7 @@
             Please see inner exception.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetSourceManager.ExportSourcesToObjectAsync(System.String)">
+        <member name="M:WGetNET.WinGetSourceManager.ExportSourcesToObjectAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Asynchronously exports the winget sources to a <see cref="T:System.Collections.Generic.List`1"/> of <see cref="T:WGetNET.WinGetSource"/> objects.
             </summary>
@@ -1248,7 +1248,7 @@
             Please see inner exception.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetSourceManager.ExportSourcesToFileAsync(System.String)">
+        <member name="M:WGetNET.WinGetSourceManager.ExportSourcesToFileAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Asynchronously exports the winget sources in json format to a file.
             </summary>
@@ -1265,7 +1265,7 @@
             Please see inner exception.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetSourceManager.ExportSourcesToFileAsync(System.String,System.String)">
+        <member name="M:WGetNET.WinGetSourceManager.ExportSourcesToFileAsync(System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Asynchronously exports the winget sources in json format to a file.
             </summary>
@@ -1283,7 +1283,7 @@
             Please see inner exception.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetSourceManager.ExportSourcesToFileAsync(System.String,WGetNET.WinGetSource)">
+        <member name="M:WGetNET.WinGetSourceManager.ExportSourcesToFileAsync(System.String,WGetNET.WinGetSource,System.Threading.CancellationToken)">
             <summary>
             Asynchronously exports the winget sources in json format to a file.
             </summary>
@@ -1317,7 +1317,7 @@
             A <see cref="T:System.Collections.Generic.List`1"/> of <see cref="T:WGetNET.WinGetSource"/> objects.
             </returns>
         </member>
-        <member name="M:WGetNET.WinGetSourceManager.ExportStringToSourcesAsync(System.String)">
+        <member name="M:WGetNET.WinGetSourceManager.ExportStringToSourcesAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Asynchronously convert the string output from winget source export to a 
             <see cref="T:System.Collections.Generic.List`1"/> of <see cref="T:WGetNET.WinGetSource"/> objects.
@@ -1363,7 +1363,7 @@
             <see langword="true"/> if the action was successfull and <see langword="false"/> if it failed.
             </returns>
         </member>
-        <member name="M:WGetNET.WinGetSourceManager.ImportSourceAsync(System.Collections.Generic.List{WGetNET.WinGetSource})">
+        <member name="M:WGetNET.WinGetSourceManager.ImportSourceAsync(System.Collections.Generic.List{WGetNET.WinGetSource},System.Threading.CancellationToken)">
             <summary>
             Asynchronously imports sources into winget.
             </summary>
@@ -1375,7 +1375,7 @@
             The result is <see langword="true"/> if the action was successfull and <see langword="false"/> if on or more sorces failed.
             </returns>
         </member>
-        <member name="M:WGetNET.WinGetSourceManager.ImportSourceAsync(WGetNET.WinGetSource)">
+        <member name="M:WGetNET.WinGetSourceManager.ImportSourceAsync(WGetNET.WinGetSource,System.Threading.CancellationToken)">
             <summary>
             Asynchronously imports a source into winget.
             </summary>
@@ -1387,7 +1387,7 @@
             The result is <see langword="true"/> if the action was successfull and <see langword="false"/> if it failed.
             </returns>
         </member>
-        <member name="M:WGetNET.WinGetSourceManager.ImportSourceAsync(System.String)">
+        <member name="M:WGetNET.WinGetSourceManager.ImportSourceAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Asynchronously imports a source into winget.
             </summary>
@@ -1420,7 +1420,7 @@
             The current user is missing administrator privileges for this call.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetSourceManager.ResetSourcesAsync">
+        <member name="M:WGetNET.WinGetSourceManager.ResetSourcesAsync(System.Threading.CancellationToken)">
             <summary>
             Asynchronously resets all sources that are installed in winget (Needs administrator rights).
             </summary>
@@ -1484,7 +1484,7 @@
             The current user is missing administrator privileges for this call.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetSourceManager.RemoveSourcesAsync(System.String)">
+        <member name="M:WGetNET.WinGetSourceManager.RemoveSourcesAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Asynchronously removes a source from winget (Needs administrator rights).
             </summary>
@@ -1506,7 +1506,7 @@
             The current user is missing administrator privileges for this call.
             </exception>
         </member>
-        <member name="M:WGetNET.WinGetSourceManager.RemoveSourcesAsync(WGetNET.WinGetSource)">
+        <member name="M:WGetNET.WinGetSourceManager.RemoveSourcesAsync(WGetNET.WinGetSource,System.Threading.CancellationToken)">
             <summary>
             Asynchronously removes a source from winget (Needs administrator rights).
             </summary>
@@ -1754,7 +1754,7 @@
             A nullable object of the given class type. It will be <see langword="null"/> if the action failed.
             </returns>
         </member>
-        <member name="M:WGetNET.HelperClasses.JsonHandler.StringToObjectAsync``1(System.String)">
+        <member name="M:WGetNET.HelperClasses.JsonHandler.StringToObjectAsync``1(System.String,System.Threading.CancellationToken)">
             <summary>
             Asynchronously deserializes a given json <see cref="T:System.String"/> to a object of the given class.
             </summary>
